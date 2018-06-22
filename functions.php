@@ -93,7 +93,10 @@ add_action( 'after_setup_theme', 'methanol_content_width', 0 );
 
 function methanol_scripts() {
 	wp_enqueue_style( 'methanol-style', get_stylesheet_uri() );
-	wp_enqueue_style( 'slick', get_template_directory_uri() . '/slick.css', null, '1.8.1' );
+	wp_enqueue_style( 'slick', get_template_directory_uri() . '/css/slick/slick.css', null, '1.8.1' );
+    wp_enqueue_style( 'fa', get_template_directory_uri() . '/css/fa/fontawesome.css', null, '5.1.0' );
+    wp_enqueue_style( 'fa-regular', get_template_directory_uri() . '/css/fa/regular.css', null, '5.1.0' );
+    wp_enqueue_style( 'fa-solid', get_template_directory_uri() . '/css/fa/solid.css', null, '5.1.0' );
 
 	wp_enqueue_script( 'methanol-navigation', get_template_directory_uri() . '/js/core/navigation.js', array(), '20151215', true );
 	wp_enqueue_script( 'methanol-skip-link-focus-fix', get_template_directory_uri() . '/js/core/skip-link-focus-fix.js', array(), '20151215', true );

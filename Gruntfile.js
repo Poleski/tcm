@@ -33,8 +33,7 @@ module.exports = function(grunt) {
                     ]
                 },
                 files: {
-                    "style.css": "less/style.less",
-                    'slick.css': "less/vendor/slick.less"
+                    "style.css": "less/style.less"
                 }
             }
         },

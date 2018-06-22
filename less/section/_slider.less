@@ -10,6 +10,67 @@
             background-size: cover;
             background-attachment: fixed;
         }
+
+        .slick-arrow {
+            display: block;
+            position: absolute;
+            z-index: 1001;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            cursor: pointer;
+            border-radius: 50%;
+            .transition-main;
+
+            &.left {
+                left: 1em;
+            }
+
+            &.right {
+                right: 1em;
+            }
+
+            i {
+                box-sizing: content-box;
+                padding: 0.25em;
+            }
+
+            &:hover {
+                background-color: fade(@c-main,50%);
+            }
+        }
+
+        .slick-dots {
+            position: absolute;
+            bottom: 0;
+
+            li {
+                width: auto;
+                height: auto;
+                z-index: 1001;
+                padding: 1em 0.5em;
+
+                button {
+                    font-size: 1em;
+                    width: 2em;
+                    height: 0.25em;
+                    background-color: @c-background;
+                    border-radius: 0;
+                    padding: 0;
+                    .transition-main;
+
+                    &:before {
+                        content: none;
+                    }
+                }
+
+                &.slick-active {
+                    button {
+                        background-color: @c-main;
+                    }
+                }
+            }
+        }
     }
 
     &.slider-fade {
