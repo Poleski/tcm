@@ -9,6 +9,126 @@
             background-position: 50% 0;
             background-size: cover;
             background-attachment: fixed;
+
+            .slide-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: fade(black, 25%);
+
+                &.light {
+                    background-color: fade(@c-background, 25%);
+                }
+
+                &.none,
+                &.dynamic {
+                    background-color: transparent;
+                }
+
+                &.dynamic {
+                    .transition-main;
+                    transition-delay: 500ms;
+                }
+
+                .slide-content {
+                    position: absolute;
+                    width: 100%;
+                    max-width: 960px;
+                    padding: 1em;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                    text-align: center;
+
+                    .slide-title {
+                        color: @c-background;
+                        font-size: 3.5em;
+                    }
+
+                    .slide-sub-title {
+                        color: @c-background;
+                    }
+
+                    &.dynamic {
+                        .slide-title,
+                        .slide-sub-title,
+                        .slide-buttons {
+                            opacity: 0;
+                            position: relative;
+                            .transition-main;
+                        }
+
+                        .slide-title {
+                            transition-delay: 500ms;
+                        }
+
+                        .slide-sub-title {
+                            transition-delay: 600ms;
+                        }
+
+                        .slide-buttons {
+                            transition-delay: 700ms;
+                        }
+
+                        &.slide-up {
+                            .slide-title,
+                            .slide-sub-title,
+                            .slide-buttons {
+                                top: 3em;
+                            }
+                        }
+
+                        &.slide-down {
+                            .slide-title,
+                            .slide-sub-title,
+                            .slide-buttons {
+                                bottom: 3em;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.slick-active {
+                .slide-overlay {
+                    &.dynamic.ready {
+                        background-color: fade(black, 50%);
+
+                        &.light {
+                            background-color: fade(@c-background, 50%);
+                        }
+                    }
+
+                    .slide-content {
+                        &.dynamic.ready {
+                            .slide-title,
+                            .slide-sub-title,
+                            .slide-buttons {
+                                opacity: 1;
+
+                            }
+
+                            &.slide-up {
+                                .slide-title,
+                                .slide-sub-title,
+                                .slide-buttons {
+                                    top: 0;
+                                }
+                            }
+
+                            &.slide-down {
+                                .slide-title,
+                                .slide-sub-title,
+                                .slide-buttons {
+                                    bottom: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .slick-arrow {

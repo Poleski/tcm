@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         uglify: {
             my_target: {
                 files: {
-                    'assets/js/main.min.js': ['assets/js/main.js']
+                    'js/vendor/jquery-nav.min.js': ['js/vendor/jquery-nav.js']
                 }
             }
         },

@@ -1,3 +1,40 @@
 .transition-main {
     transition: all 200ms ease;
 }
+
+.button-main {
+    white-space: nowrap;
+    padding: 0.5em 1em;
+    border: 2px solid @c-main;
+    background-color: @c-main;
+    color: @c-font-alt;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    .transition-main;
+
+    &:hover {
+        background: @c-background;
+        color: @c-main;
+    }
+
+    &:visited {
+        color: @c-font-alt;
+    }
+}
+
+.button-sub {
+    .button-main;
+    border-color: @c-sub;
+    background-color: @c-sub;
+    color: @c-background;
+
+    &:hover {
+        background-color: @c-background;
+        color: @c-sub;
+    }
+
+    &:visited {
+        color: @c-background;
+    }
+}

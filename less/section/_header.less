@@ -1,0 +1,35 @@
+#masthead {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
+    background-color: fade(@c-main, 25%);
+    .transition-main;
+
+    &.scrolled {
+        background-color: @c-main;
+    }
+
+    .nav-menu {
+        float: right;
+
+        li {
+            a {
+                color: @c-background;
+                text-transform: uppercase;
+                font-weight: bold;
+                padding: 1em;
+            }
+
+            &.active,
+            &:hover {
+                a {
+                    background-color: @c-background;
+                    color: @c-main;
+                    .transition-main;
+                }
+            }
+        }
+    }
+}

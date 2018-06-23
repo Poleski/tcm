@@ -1,3 +1,82 @@
+// Layout
+
+section {
+    padding: 1em;
+    margin: 0 0 3em;
+
+    &.no-title {
+        .section-title {
+            display: none;
+        }
+    }
+
+    &.no-padding {
+        padding: 0;
+        margin-bottom: 0;
+    }
+}
+
+// Headers
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 0;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: @c-main;
+}
+
+h2 {
+    font-size: 2em;
+    color: @c-main;
+}
+
+h3 {
+    font-size: 1.75em;
+}
+
+h4 {
+    font-size: 1.5em;
+}
+
+h5 {
+    font-size: 1.25em;
+}
+
+h6 {
+    font-size: 1em;
+}
+
+// Text
+
+p {
+    color: @c-font;
+    line-height: 1.2;
+    margin: 0.5em 0;
+}
+
+
+// Links
+
+.btn-default {
+    .button-main;
+}
+
+.btn-sub {
+    .button-sub;
+}
+
+a,
+a:active,
+a:focus {
+    outline: 0;
+}
+
+// Icons
+
 i.fa,
 i.fas {
     width: 1em;

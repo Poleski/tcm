@@ -97,11 +97,14 @@ function methanol_scripts() {
     wp_enqueue_style( 'fa', get_template_directory_uri() . '/css/fa/fontawesome.css', null, '5.1.0' );
     wp_enqueue_style( 'fa-regular', get_template_directory_uri() . '/css/fa/regular.css', null, '5.1.0' );
     wp_enqueue_style( 'fa-solid', get_template_directory_uri() . '/css/fa/solid.css', null, '5.1.0' );
+    wp_enqueue_style( 'magnific-popup-css', get_template_directory_uri() . '/css/magnific-popup/magnific-popup.css', null, '1.1.0' );
 
 	wp_enqueue_script( 'methanol-navigation', get_template_directory_uri() . '/js/core/navigation.js', array(), '20151215', true );
 	wp_enqueue_script( 'methanol-skip-link-focus-fix', get_template_directory_uri() . '/js/core/skip-link-focus-fix.js', array(), '20151215', true );
     wp_enqueue_script( 'slick', get_template_directory_uri() . '/js/vendor/slick.min.js', array('jquery'), null, true );
-    wp_enqueue_script( 'main', get_template_directory_uri() . '/js/main.js', array('jquery', 'slick'), null, true );
+    wp_enqueue_script( 'nav', get_template_directory_uri() . '/js/vendor/jquery-nav.min.js', array('jquery'), null, true );
+    wp_enqueue_script( 'magnific-popup', get_template_directory_uri() . '/js/vendor/jquery-magnific-popup.min.js', array('jquery'), null, true );
+    wp_enqueue_script( 'main', get_template_directory_uri() . '/js/main.js', array('jquery', 'nav', 'slick'), null, true );
 
 }
 add_action( 'wp_enqueue_scripts', 'methanol_scripts' );
@@ -419,3 +422,58 @@ function member_category_filter()
     );
 }
 add_action('init', 'member_category_filter', 0 );
+
+/* Custom page fields */
+
+function add_custom_metaboxes() {
+    add_meta_box('page_title_remove', 'Remove title?', 'page_title_remove_checkbox', 'page', 'side', 'low');
+    add_meta_box('page_padding_remove', 'Remove padding?', 'page_padding_remove_checkbox', 'page', 'side', 'low');
+}
+
+add_action('add_meta_boxes', 'add_custom_metaboxes' );
+
+function page_title_remove_checkbox() {
+    global $post;
+    echo '<input type="hidden" name="meta_blog_noncename" id="meta_blog_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+    $title_disabled = get_post_meta($post->ID, 'page_title_remove', true);
+    $title_disabled_check = ($title_disabled == "on") ? "checked" : "";
+    echo '<input type="checkbox" name="page_title_remove" ' . $title_disabled_check . ' />';
+};
+
+function page_padding_remove_checkbox() {
+    global $post;
+    echo '<input type="hidden" name="meta_blog_noncename" id="meta_blog_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+    $padding_disabled = get_post_meta($post->ID, 'page_padding_remove', true);
+    $padding_disabled_check = ($padding_disabled == "on") ? "checked" : "";
+    echo '<input type="checkbox" name="page_padding_remove" ' . $padding_disabled_check . ' />';
+};
+
+function save_custom_metaboxes($post_id, $post) {
+
+    if( $post->post_type !== 'page' ) {
+        return $post->ID;
+    }
+
+    if ( !current_user_can( 'edit_post', $post->ID )) {
+        return $post->ID;
+    }
+
+
+    $custom_meta['page_title_remove'] = $_POST['page_title_remove'];
+    $custom_meta['page_padding_remove'] = $_POST['page_padding_remove'];
+
+
+    foreach ($custom_meta as $key => $value) {
+        if( $post->post_type == 'revision' ) return;
+        $value = implode(',', (array)$value);
+        if(get_post_meta($post_id, $key, FALSE)) {
+            update_post_meta($post_id, $key, $value);
+        } else {
+            add_post_meta($post_id, $key, $value);
+        }
+        if(!$value) delete_post_meta($post_id, $key);
+    }
+}
+
+add_action('save_post', 'save_custom_metaboxes', 1, 2);
+
