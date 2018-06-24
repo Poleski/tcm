@@ -31,8 +31,8 @@ $main_query = new WP_Query($args);
 while ($main_query->have_posts()) : $main_query->the_post();
 
     $backgroundImage = has_post_thumbnail();
-    $backgroundColor = get_post_meta($post->ID, 'background-color', true);
-    $hasImage = get_post_meta($post->ID, 'background-color', true);
+    $backgroundColor = get_post_meta($post->ID, 'page_background_color', true);
+    $hasImage = has_post_thumbnail();
     $removeTitle= get_post_meta($post->ID, "page_title_remove", true);
     $removePadding = get_post_meta($post->ID, "page_padding_remove", true);
     $slug = substr(get_page_template_slug($post->ID), 0, -4);
@@ -46,10 +46,6 @@ while ($main_query->have_posts()) : $main_query->the_post();
 
     if ($backgroundImage) {
         $sectionStyles[] = "background-image: url(" . the_post_thumbnail_url('full') . ")";
-    }
-
-    if ($backgroundColor) {
-        $sectionStyles[] = "background-color: " . $backgroundColor . ")";
     }
 
     if ($removeTitle) {

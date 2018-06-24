@@ -199,4 +199,74 @@
             transform: none !important;
         }
     }
+
+    &.slider-testimonial {
+        .slides {
+            .slide {
+                height: auto;
+                background: none;
+
+                .testimonial-container {
+                    max-width: 1260px;
+                    padding: 1em;
+                    margin: 0 auto;
+
+                    .testimonial-quote-container {
+                        blockquote {
+                            font-size: 1.5em;
+                            margin-bottom: 0.5em;
+
+                            i.fas {
+                                margin-right: 0.5em;
+                                font-size: 1.5em;
+                            }
+                        }
+                    }
+
+                    .testimonial-footer {
+                        display: flex;
+                        justify-content: center;
+                        flex-wrap: nowrap;
+                        align-items: center;
+                        margin-bottom: 2em;
+
+                        .testimonial-footer-left {
+                            padding-right: 1em;
+
+                            img {
+                                max-width: 100px;
+                                border-radius: 50%;
+                            }
+                        }
+
+                        .testimonial-footer-right {
+                            h4 {
+                                margin-bottom: 0.5em;
+                                color: @c-background;
+                            }
+
+                            p {
+                                font-style: italic;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .slick-dots {
+                li {
+                    button {
+                        border: 1px solid @c-background;
+                        background-color: @c-main;
+                    }
+
+                    &.slick-active {
+                        button {
+                            background-color: @c-background;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

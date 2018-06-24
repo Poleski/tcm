@@ -98,15 +98,22 @@ function methanol_scripts() {
     wp_enqueue_style( 'fa-regular', get_template_directory_uri() . '/css/fa/regular.css', null, '5.1.0' );
     wp_enqueue_style( 'fa-solid', get_template_directory_uri() . '/css/fa/solid.css', null, '5.1.0' );
     wp_enqueue_style( 'magnific-popup-css', get_template_directory_uri() . '/css/magnific-popup/magnific-popup.css', null, '1.1.0' );
+    wp_enqueue_style( 'jquery-ui', get_template_directory_uri() . '/css/ui/jquery-ui.min.css', null, '1.12.1' );
+    wp_enqueue_style( 'jquery-ui-structure', get_template_directory_uri() . '/css/ui/jquery-ui.structure.min.css', null, '1.12.1' );
+    wp_enqueue_style( 'jquery-ui-theme', get_template_directory_uri() . '/css/ui/jquery-ui.theme.min.css', null, '1.12.1' );
 
 	wp_enqueue_script( 'methanol-navigation', get_template_directory_uri() . '/js/core/navigation.js', array(), '20151215', true );
 	wp_enqueue_script( 'methanol-skip-link-focus-fix', get_template_directory_uri() . '/js/core/skip-link-focus-fix.js', array(), '20151215', true );
     wp_enqueue_script( 'slick', get_template_directory_uri() . '/js/vendor/slick.min.js', array('jquery'), null, true );
     wp_enqueue_script( 'nav', get_template_directory_uri() . '/js/vendor/jquery-nav.min.js', array('jquery'), null, true );
     wp_enqueue_script( 'magnific-popup', get_template_directory_uri() . '/js/vendor/jquery-magnific-popup.min.js', array('jquery'), null, true );
-    wp_enqueue_script( 'main', get_template_directory_uri() . '/js/main.js', array('jquery', 'nav', 'slick'), null, true );
+    wp_enqueue_script( 'jquery-ui', get_template_directory_uri() . '/js/vendor/jquery-ui.min.js', array('jquery'), null, true );
+    wp_enqueue_script( 'main', get_template_directory_uri() . '/js/main.js', array('jquery', 'nav', 'slick', 'jquery-ui'), null, true );
 
+    wp_register_style( 'google_fonts' , '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i&amp;subset=latin-ext');
+    wp_enqueue_style('google_fonts');
 }
+
 add_action( 'wp_enqueue_scripts', 'methanol_scripts' );
 
 remove_filter( 'the_content', 'wpautop' );
@@ -245,7 +252,8 @@ function faq_post()
             'supports' =>
                 array(
                     'title',
-                    'editor'
+                    'editor',
+                    'page-attributes'
                 )
         );
     register_post_type(__( 'faq', 'methanol' ),$args);
@@ -352,7 +360,9 @@ function member_post()
             'supports' =>
                 array(
                     'title',
-                    'editor'
+                    'editor',
+                    'page-attributes',
+                    'thumbnail'
                 )
         );
     register_post_type(__( 'member', 'methanol' ),$args);
@@ -426,11 +436,31 @@ add_action('init', 'member_category_filter', 0 );
 /* Custom page fields */
 
 function add_custom_metaboxes() {
+    global $post;
+
+    // General meta boxes
+
+    add_meta_box('page_background_color', 'Add background color?', 'page_background_color_checkbox', 'page', 'side', 'low');
     add_meta_box('page_title_remove', 'Remove title?', 'page_title_remove_checkbox', 'page', 'side', 'low');
     add_meta_box('page_padding_remove', 'Remove padding?', 'page_padding_remove_checkbox', 'page', 'side', 'low');
+
+    add_meta_box('member_short_description', 'Short description', 'member_short_description_input', 'member', 'normal', 'low');
+    add_meta_box('testimonial_subtitle', 'Subtitle', 'testimonial_subtitle_input', 'testimonial', 'normal', 'low');
+
+    // Template specific meta boxes
+
+    if (!empty($post)) {
+        $post_template = get_post_meta( $post->ID, '_wp_page_template', true );
+
+        if ( 'template-members.php' == $post_template || 'template-faqs.php' == $post_template || 'template-testimonials.php' == $post_template  ) {
+            add_meta_box('custom_category_filter', 'Filter categories', "custom_category_filter_input", 'page', 'side', 'low');
+        }
+    }
 }
 
 add_action('add_meta_boxes', 'add_custom_metaboxes' );
+
+// Custom meta boxes  HTML
 
 function page_title_remove_checkbox() {
     global $post;
@@ -448,7 +478,36 @@ function page_padding_remove_checkbox() {
     echo '<input type="checkbox" name="page_padding_remove" ' . $padding_disabled_check . ' />';
 };
 
-function save_custom_metaboxes($post_id, $post) {
+
+function page_background_color_checkbox() {
+    global $post;
+    echo '<input type="hidden" name="meta_blog_noncename" id="meta_blog_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+    $page_background_color = get_post_meta($post->ID, 'page_background_color', true);
+    $page_background_color_check = ($page_background_color == "on") ? "checked" : "";
+    echo '<input type="checkbox" name="page_background_color" ' . $page_background_color_check . ' />';
+};
+
+function member_short_description_input() {
+    global $post;
+    echo '<input type="hidden" name="meta_priv_noncename" id="meta_priv_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+    echo '<input type="text" class="full-width" name="member_short_description" value="' . get_post_meta($post->ID, 'member_short_description', true)  . '" />';
+};
+
+function testimonial_subtitle_input() {
+    global $post;
+    echo '<input type="hidden" name="meta_priv_noncename" id="meta_priv_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+    echo '<input type="text" class="full-width" name="testimonial_subtitle" value="' . get_post_meta($post->ID, 'testimonial_subtitle', true)  . '" />';
+};
+
+function custom_category_filter_input() {
+    global $post;
+    echo '<input type="hidden" name="meta_priv_noncename" id="meta_priv_noncename" value="' . wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+    echo '<input type="text" class="full-width" name="custom_category_filter" value="' . get_post_meta($post->ID, 'custom_category_filter', true)  . '" />';
+};
+
+// Saving custom meta boxes
+
+function save_custom_page_metaboxes($post_id, $post) {
 
     if( $post->post_type !== 'page' ) {
         return $post->ID;
@@ -458,10 +517,10 @@ function save_custom_metaboxes($post_id, $post) {
         return $post->ID;
     }
 
-
+    $custom_meta['page_background_color'] = $_POST['page_background_color'];
     $custom_meta['page_title_remove'] = $_POST['page_title_remove'];
     $custom_meta['page_padding_remove'] = $_POST['page_padding_remove'];
-
+    $custom_meta['custom_category_filter'] = $_POST['custom_category_filter'];
 
     foreach ($custom_meta as $key => $value) {
         if( $post->post_type == 'revision' ) return;
@@ -475,5 +534,56 @@ function save_custom_metaboxes($post_id, $post) {
     }
 }
 
-add_action('save_post', 'save_custom_metaboxes', 1, 2);
+add_action('save_post', 'save_custom_page_metaboxes', 1, 2);
 
+function save_custom_post_metaboxes($post_id, $post) {
+
+    if ( !wp_verify_nonce( $_POST['meta_priv_noncename'], plugin_basename(__FILE__) )) {
+        return $post->ID;
+    }
+
+    if ( !current_user_can( 'edit_post', $post->ID )) {
+        return $post->ID;
+    }
+
+
+    $custom_meta['member_short_description'] = $_POST['member_short_description'];
+    $custom_meta['testimonial_subtitle'] = $_POST['testimonial_subtitle'];
+
+    foreach ($custom_meta as $key => $value) {
+        if( $post->post_type == 'revision' ) return;
+        $value = implode(',', (array)$value);
+        if(get_post_meta($post_id, $key, FALSE)) {
+            update_post_meta($post_id, $key, $value);
+        } else {
+            add_post_meta($post_id, $key, $value);
+        }
+        if(!$value) delete_post_meta($post_id, $key);
+    }
+}
+
+add_action('save_post', 'save_custom_post_metaboxes', 2, 2);
+
+function outlet_admin_styles() {
+    echo '<style> .inside input.full-width { width: 100% } </style>';
+}
+
+add_action('admin_head', 'outlet_admin_styles');
+
+// Widgets
+
+function event_widgets_init() {
+    for($i =1; $i<= 4; $i++){
+        register_sidebar(array(
+            'name' => __('Footer widget ', 'event') . $i,
+            'id' => 'methanol_footer_'.$i,
+            'description' => __('Displays footer widgets ', 'event').$i,
+            'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+            'after_widget' => '</aside>',
+            'before_title' => '<h3 class="widget-title">',
+            'after_title' => '</h3>',
+        ));
+    }
+}
+
+add_action('widgets_init', 'event_widgets_init', 11);

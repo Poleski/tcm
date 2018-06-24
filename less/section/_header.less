@@ -4,11 +4,20 @@
     left: 0;
     width: 100%;
     z-index: 10000;
-    background-color: fade(@c-main, 25%);
-    .transition-main;
+    background-color: @c-main;
 
-    &.scrolled {
-        background-color: @c-main;
+    &.bottom {
+        top: initial;
+        bottom: 0;
+    }
+
+    &.dynamic {
+        background-color: fade(@c-main, 25%);
+
+        .transition-main;
+        &.scrolled {
+            background-color: @c-main;
+        }
     }
 
     .nav-menu {
@@ -19,7 +28,7 @@
                 color: @c-background;
                 text-transform: uppercase;
                 font-weight: bold;
-                padding: 1em;
+                padding: 0.5em 1em;
             }
 
             &.active,

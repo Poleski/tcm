@@ -10,22 +10,29 @@
  */
 
 ?>
-
-	</div><!-- #content -->
+</div>
 
 	<footer id="colophon" class="site-footer">
+        <?php if( is_active_sidebar( 'methanol_footer_1' ) || is_active_sidebar( 'methanol_footer_2' ) || is_active_sidebar( 'methanol_footer_3' ) || is_active_sidebar( 'methanol_footer_4' )) : ?>
+        <div class="widget-container">
+            <div class="widgets">
+                <?php
+                    for($i = 1; $i < 5; $i++) :
+                        $widget = 'methanol_footer_' . $i;
+
+                        if (is_active_sidebar($widget)) :
+                ?>
+                    <div class="footer-widget <?php echo $widget; ?>">
+                        <?php dynamic_sidebar( $widget );?>
+                    </div>
+                    <?php endif; ?>
+                <?php endfor; ?>
+            </div>
+        </div>
+        <?php endif; ?>
+
 		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'methanol' ) ); ?>">
-				<?php
-				/* translators: %s: CMS name, i.e. WordPress. */
-				printf( esc_html__( 'Proudly powered by %s', 'methanol' ), 'WordPress' );
-				?>
-			</a>
-			<span class="sep"> | </span>
-				<?php
-				/* translators: 1: Theme name, 2: Theme author. */
-				printf( esc_html__( 'Theme: %1$s by %2$s.', 'methanol' ), 'methanol', '<a href="http://underscores.me/">Merhanic</a>' );
-				?>
+			<span>All rights reserved (c) <?php echo date('Y'); ?> Richlife</span>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->

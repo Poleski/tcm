@@ -1,5 +1,9 @@
 // Layout
 
+body {
+    font-family: 'Lato', Verdana, sans-serif;
+}
+
 section {
     padding: 1em;
     margin: 0 0 3em;
@@ -13,6 +17,23 @@ section {
     &.no-padding {
         padding: 0;
         margin-bottom: 0;
+    }
+
+    &.background-section {
+        background-color: @c-main;
+
+        h1,
+        h2,
+        p,
+        blockquote {
+            color: @c-background;
+        }
+    }
+
+    .generic-container {
+        max-width: 1260px;
+        width: 100%;
+        margin: 0 auto;
     }
 }
 
@@ -56,6 +77,12 @@ p {
     color: @c-font;
     line-height: 1.2;
     margin: 0.5em 0;
+}
+
+blockquote {
+    color: @c-font;
+    line-height: 1.5;
+    font-style: italic;
 }
 
 

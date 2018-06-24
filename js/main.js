@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
         var header = $('#masthead');
         var windowOffset = $(window).scrollTop();
 
-        if (windowOffset > header.height()) {
+        if (windowOffset > header.height() && header.hasClass("dynamic")) {
             header.addClass("scrolled");
         } else {
             header.removeClass("scrolled");
@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
 
     headerOffset();
 
-    // Slick
+    // Sliders
 
     var slickSettings = {
         autoplay: true,
@@ -53,12 +53,30 @@ jQuery(document).ready(function($) {
             slickSettings.dots = true;
         }
 
+        if (slider.hasClass('slider-testimonial')) {
+            slickSettings.adaptiveHeight = true;
+            slickSettings.arrows = false;
+            slickSettings.autoplaySpeed = 7000;
+        }
+
         slider.on('init', function(e, slick) {
             slider.find('.slide-overlay.dynamic, .slide-content.dynamic').addClass('ready');
         });
 
         $('.slides', this).slick(slickSettings)
+    });
+
+    // FAQs
+
+    $('.faqs').each(function() {
+        $(this).accordion({
+            active: false,
+            collapsible: true,
+            heightStyle: 'content',
+            icons: false
+        });
     })
+
 
     // Scroll cache
 
