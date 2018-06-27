@@ -35,7 +35,7 @@ jQuery(document).ready(function($) {
     // Sliders
 
     var slickSettings = {
-        autoplay: true,
+        //autoplay: true,
         infinite: true,
         prevArrow: '<div class="left carousel-arrows"><i class="fas fa-angle-left fa-2x"></i></div>',
         nextArrow: '<div class="right carousel-arrows"><i class="fas fa-angle-right fa-2x"></i></div>',
